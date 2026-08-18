@@ -1,0 +1,28 @@
+baseURL = "https://lingyaotong.com/"
+locale = "en-GB"
+title = "Lingyao Tong"
+theme = "congo"
+
+[params]
+  description = "Personal website"
+
+[[menu.main]]
+  name = "Home"
+  pageRef = "home"
+  weight = 10
+
+
+[[menu.main]]
+  name = "Research"
+  pageRef = "research"
+  weight = 10
+
+[[menu.main]]
+  name = "Art"
+  pageRef = "art"
+  weight = 20
+
+[[menu.main]]
+  name = "Others"
+  pageRef = "others"
+  weight = 30
