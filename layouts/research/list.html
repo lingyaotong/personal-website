@@ -1,0 +1,44 @@
+{{ define "main" }}
+<section class="mt-8 prose dark:prose-invert max-w-none">
+  {{ .Content }}
+  {{ $orcid := "0000-0002-5023-6949" }}
+  {{ $url := printf "https://pub.orcid.org/v3.0/%s/works" $orcid }}
+  {{ $opts := dict "headers" (dict "Accept" "application/json") }}
+  {{ with try (resources.GetRemote $url $opts) }}
+    {{ with .Err }}
+      <p>无法加载论文列表：{{ . }}</p>
+    {{ else with .Value }}
+      {{ $data := . | transform.Unmarshal }}
+      <ul class="list-none space-y-6 mt-6">
+        {{ range $data.group }}
+          {{ $summaries := index . "work-summary" }}
+          {{ with $summaries }}
+            {{ $work := index . 0 }}
+            <li>
+              <h3 class="text-lg font-semibold">
+                {{ with $work.url }}<a href="{{ .value }}" target="_blank" rel="noopener">{{ end }}
+                {{ $work.title.title.value }}
+                {{ if $work.url }}</a>{{ end }}
+              </h3>
+              <p class="text-sm text-neutral-500">
+                {{ with index $work "journal-title" }}{{ .value }} · {{ end }}
+                {{ with index $work "publication-date" }}{{ with .year }}{{ .value }}{{ end }}{{ end }}
+              </p>
+              {{ $extIds := index $work "external-ids" }}
+              {{ with $extIds }}
+                {{ range index . "external-id" }}
+                  {{ if eq (index . "external-id-type") "doi" }}
+                    <a href="https://doi.org/{{ index . "external-id-value" }}" target="_blank" rel="noopener" class="text-sm text-primary-600">DOI ↗</a>
+                  {{ end }}
+                {{ end }}
+              {{ end }}
+            </li>
+          {{ end }}
+        {{ end }}
+      </ul>
+    {{ else }}
+      <p>无法获取远程资源</p>
+    {{ end }}
+  {{ end }}
+</section>
+{{ end }}

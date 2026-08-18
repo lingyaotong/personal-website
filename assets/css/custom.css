@@ -1,0 +1,18 @@
+section.not-prose img,
+section.not-prose picture {
+  width: 14rem !important;
+  height: 14rem !important;
+  aspect-ratio: 1 / 1 !important;
+  object-fit: cover !important;
+  border-radius: 9999px !important;
+  display: block !important;
+  overflow: hidden !important;
+}
+
+html:not(.dark) body {
+  background-color: #f4f6f8 !important;
+}
+
+html.dark body {
+  background-color: #101a2c !important;
+}
